@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>백엔드 개발 작업 - 데일리 스크럼 게시판</title>
+    <meta name="description" content="팀원들의 데일리 스크럼을 확인하고 공유하세요">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #f0fff4 50%, #f0f8ff 100%);
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(255, 107, 74, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff7b54 0%, #ff9478 50%, #4ecdc4 100%);
+            color: white;
+            padding: 40px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(255, 107, 74, 0.3);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 18px;
+            margin: 0;
+            opacity: 0.95;
+            font-weight: 500;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 24px 16px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 데일리 스크럼 게시판</h1>
+            <p>팀원들의 데일리 스크럼을 확인하고 공유하세요</p>
+        </div>
+
+        <div class="main-content">
+            <style>
+    .scrum-meta {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        border-left: 4px solid #007bff;
+    }
+
+    .scrum-meta h2 {
+        color: #007bff;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+    }
+
+    .meta-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .meta-item {
+        background: white;
+        padding: 12px;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .meta-label {
+        font-weight: bold;
+        color: #495057;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .meta-value {
+        color: #6c757d;
+    }
+
+    .scrum-content {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        line-height: 1.8;
+    }
+
+    .scrum-content h1,
+    .scrum-content h2,
+    .scrum-content h3 {
+        color: #212529;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    .scrum-content h1 {
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    .scrum-content ul,
+    .scrum-content ol {
+        margin-left: 20px;
+        margin-bottom: 15px;
+    }
+
+    .scrum-content li {
+        margin-bottom: 8px;
+    }
+
+    .scrum-content code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+    }
+
+    .scrum-content pre {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin: 15px 0;
+    }
+
+    .scrum-content blockquote {
+        border-left: 4px solid #007bff;
+        padding-left: 20px;
+        margin: 20px 0;
+        font-style: italic;
+        color: #6c757d;
+    }
+
+    @media (max-width: 768px) {
+        .meta-info {
+            grid-template-columns: 1fr;
+        }
+        
+        .scrum-content {
+            padding: 20px;
+        }
+    }
+</style>
+
+<a href="../" class="back-link">← 스크럼 게시판으로 돌아가기</a>
+
+<div class="scrum-meta">
+    <h2>📋 백엔드 개발 작업</h2>
+    
+    <div class="meta-info">
+        <div class="meta-item">
+            <span class="meta-label">👤 작성자</span>
+            <span class="meta-value">신민혁</span>
+        </div>
+        
+        <div class="meta-item">
+            <span class="meta-label">📅 날짜</span>
+            <span class="meta-value">2024년 01월 16일 (Tue)</span>
+        </div>
+        
+        
+        
+        
+    </div>
+</div>
+
+<div class="scrum-content">
+    <h2 id="-어제-한-일">📝 어제 한 일</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />API 문서 작성</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />데이터베이스 연결 설정</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />로그인 기능 구현</li>
+</ul>
+
+<h3 id="상세-내용">상세 내용</h3>
+
+<p>Node.js로 RESTful API를 구현하고 JWT 인증을 적용했습니다. 생각보다 CORS 설정에서 시간이 많이 걸렸네요.</p>
+
+<h2 id="-오늘-할-일">🎯 오늘 할 일</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />회원가입 API 완성</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />단위 테스트 작성</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />코드 리팩토링</li>
+</ul>
+
+<h2 id="-한줄평">💭 한줄평</h2>
+
+<p>개발은 역시 삽질의 연속이지만 그래도 재미있다!</p>
+
+<h2 id="-공유하고-싶은-것">🔗 공유하고 싶은 것</h2>
+
+<ul>
+  <li>JWT 토큰 관리하는 좋은 방법을 찾았음</li>
+  <li>Express.js 미들웨어 순서가 정말 중요하다는 걸 깨달음</li>
+</ul>
+
+</div> 
+        </div>
+    </div>
+</body>
+</html> 

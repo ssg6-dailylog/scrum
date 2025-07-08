@@ -1,0 +1,70 @@
+# Jekyll 설정
+title: "데일리 스크럼 게시판"
+description: "팀원들의 데일리 스크럼을 확인하고 공유하세요"
+url: ""
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: /:title/
+encoding: utf-8
+
+# Kramdown 설정
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# 컬렉션 설정 (기본 posts 사용)
+
+# 기본값 설정
+defaults:
+  - scope:
+      path: "_scrums"
+      type: "scrums"
+    values:
+      layout: "scrum"
+  - scope:
+      path: "_posts"
+      type: "posts"
+    values:
+      layout: "scrum"
+
+# 플러그인
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# 제외할 파일/폴더
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .bundle
+  - .sass-cache
+  - .jekyll-cache
+  - .jekyll-metadata
+
+# 팀원 목록
+team_members:
+  - name: "신민혁"
+    folder: "신민혁"
+  - name: "고윤아"
+    folder: "고윤아"
+  - name: "김병곤"
+    folder: "김병곤"
+  - name: "김선민"
+    folder: "김선민"
+  - name: "최문규"
+    folder: "최문규"
+
+# 시간대 설정
+timezone: Asia/Seoul
+
+# 언어 설정
+lang: ko 

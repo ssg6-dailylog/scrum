@@ -1,0 +1,27 @@
+# IDE 설정 파일
+.idea/
+*.iml
+
+# OS 임시 파일
+.DS_Store
+Thumbs.db
+
+# 로그 파일
+*.log
+
+# 환경 설정 파일 (민감 정보)
+*.env
+*.properties
+
+# 테스트 리포트
+test-output/
+
+# IntelliJ + 기타
+*.iws
+*.ipr
+
+# VSCode (혹시 같이 쓰는 팀원 있을 경우)
+.vscode/
+
+# XML 파일 무시 (형이 이미 추가한 거)
+*.xml

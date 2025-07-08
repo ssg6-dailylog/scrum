@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔄 HTML → Jekyll 마이그레이션 가이드 - 데일리 스크럼 게시판</title>
+    <meta name="description" content="팀원들의 데일리 스크럼을 확인하고 공유하세요">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #f0fff4 50%, #f0f8ff 100%);
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(255, 107, 74, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff7b54 0%, #ff9478 50%, #4ecdc4 100%);
+            color: white;
+            padding: 40px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(255, 107, 74, 0.3);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 18px;
+            margin: 0;
+            opacity: 0.95;
+            font-weight: 500;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 24px 16px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 데일리 스크럼 게시판</h1>
+            <p>팀원들의 데일리 스크럼을 확인하고 공유하세요</p>
+        </div>
+
+        <div class="main-content">
+            <h1 id="-html--jekyll-마이그레이션-가이드">🔄 HTML → Jekyll 마이그레이션 가이드</h1>
+
+<p>기존 HTML 기반 스크럼 시스템을 Jekyll + 마크다운 방식으로 변경하는 가이드입니다.</p>
+
+<h2 id="-변경-사항-요약">📋 변경 사항 요약</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>기존 방식</th>
+      <th>새로운 방식</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>파일 형식</td>
+      <td><code class="language-plaintext highlighter-rouge">.html</code></td>
+      <td><code class="language-plaintext highlighter-rouge">.md</code> (마크다운)</td>
+    </tr>
+    <tr>
+      <td>파일 위치</td>
+      <td><code class="language-plaintext highlighter-rouge">개인폴더/파일명.html</code></td>
+      <td><code class="language-plaintext highlighter-rouge">_posts/YYYY-MM-DD-제목.md</code></td>
+    </tr>
+    <tr>
+      <td>메타데이터</td>
+      <td>HTML 내부</td>
+      <td>Front Matter</td>
+    </tr>
+    <tr>
+      <td>템플릿</td>
+      <td><code class="language-plaintext highlighter-rouge">template.html</code></td>
+      <td><code class="language-plaintext highlighter-rouge">template.md</code></td>
+    </tr>
+    <tr>
+      <td>빌드 방식</td>
+      <td>GitHub Actions</td>
+      <td>GitHub Pages 자동 빌드</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="-마이그레이션-단계">🚀 마이그레이션 단계</h2>
+
+<h3 id="1단계-새로운-파일-구조-이해">1단계: 새로운 파일 구조 이해</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>기존:
+개인폴더/2024-01-15-제목.html
+
+신규:
+_posts/2024-01-15-제목.md
+</code></pre></div></div>
+
+<h3 id="2단계-기존-html-파일을-마크다운으로-변환">2단계: 기존 HTML 파일을 마크다운으로 변환</h3>
+
+<h4 id="html-예시">HTML 예시:</h4>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"scrum-header"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>🗓️ 2024년 01월 15일 (월)<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"author"</span><span class="nt">&gt;</span>작성자: 신민혁<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"section"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h2&gt;</span>📝 오늘 한 일<span class="nt">&lt;/h2&gt;</span>
+    <span class="nt">&lt;ul&gt;</span>
+        <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"completed"</span><span class="nt">&gt;</span>사용자 로그인 기능 구현<span class="nt">&lt;/li&gt;</span>
+        <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"completed"</span><span class="nt">&gt;</span>JWT 토큰 시스템 구축<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<h4 id="마크다운-변환">마크다운 변환:</h4>
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">scrum</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">프로젝트</span><span class="nv"> </span><span class="s">진행상황"</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s">2024-01-15</span>
+<span class="na">author</span><span class="pi">:</span> <span class="s2">"</span><span class="s">신민혁"</span>
+<span class="na">categories</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">scrum</span><span class="pi">]</span>
+<span class="na">project</span><span class="pi">:</span> <span class="s2">"</span><span class="s">쇼핑몰</span><span class="nv"> </span><span class="s">프로젝트"</span>
+<span class="na">category</span><span class="pi">:</span> <span class="s2">"</span><span class="s">백엔드"</span>
+<span class="nn">---</span>
+
+<span class="gu">## 📝 오늘 한 일</span>
+<span class="p">
+-</span> [x] 사용자 로그인 기능 구현
+<span class="p">-</span> [x] JWT 토큰 시스템 구축
+</code></pre></div></div>
+
+<h3 id="3단계-자동-변환-스크립트-선택사항">3단계: 자동 변환 스크립트 (선택사항)</h3>
+
+<h4 id="간단한-python-스크립트로-변환-도우미">간단한 Python 스크립트로 변환 도우미:</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">def</span> <span class="nf">convert_html_to_md</span><span class="p">(</span><span class="n">html_file_path</span><span class="p">):</span>
+    <span class="s">"""HTML 스크럼 파일을 마크다운으로 변환"""</span>
+    
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">html_file_path</span><span class="p">,</span> <span class="s">'r'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    
+    <span class="c1"># 기본 정보 추출
+</span>    <span class="n">title_match</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s">'&lt;h1[^&gt;]*&gt;.*?(\d{4}년\s*\d{1,2}월\s*\d{1,2}일).*?&lt;/h1&gt;'</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+    <span class="n">author_match</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s">'작성자[:：]\s*([^&lt;\n]+)'</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">title_match</span><span class="p">:</span>
+        <span class="n">date_str</span> <span class="o">=</span> <span class="n">title_match</span><span class="p">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># 날짜 파싱 및 변환 로직 추가
+</span>    
+    <span class="c1"># Front Matter 생성
+</span>    <span class="n">front_matter</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"""---
+layout: scrum
+title: "프로젝트 진행상황"
+date: </span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s">
+author: "</span><span class="si">{</span><span class="n">author_match</span><span class="p">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">author_match</span> <span class="k">else</span> <span class="s">'작성자'</span><span class="si">}</span><span class="s">"
+categories: [scrum]
+project: "프로젝트명"
+category: "분야"
+---
+
+"""</span>
+    
+    <span class="c1"># HTML을 마크다운으로 변환하는 로직 추가
+</span>    <span class="c1"># (pandoc 사용 권장)
+</span>    
+    <span class="k">return</span> <span class="n">front_matter</span> <span class="o">+</span> <span class="n">converted_content</span>
+
+<span class="c1"># 사용 예시
+# convert_html_to_md('신민혁/2024-01-15-example.html')
+</span></code></pre></div></div>
+
+<h3 id="4단계-새로운-워크플로우-적용">4단계: 새로운 워크플로우 적용</h3>
+
+<ol>
+  <li><strong>기존 파일 백업</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cp</span> <span class="nt">-r</span> 신민혁/ backup/신민혁/
+<span class="nb">cp</span> <span class="nt">-r</span> 고윤아/ backup/고윤아/
+<span class="c"># ... 다른 폴더들도 백업</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>마크다운 파일 생성</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">template.md</code> 사용해서 새로운 스크럼 작성</li>
+      <li><code class="language-plaintext highlighter-rouge">_posts/</code> 폴더에 저장</li>
+    </ul>
+  </li>
+  <li><strong>GitHub Pages 설정</strong>
+    <ul>
+      <li>Repository Settings &gt; Pages</li>
+      <li>Source: Deploy from a branch</li>
+      <li>Branch: main (또는 master)</li>
+      <li>Folder: <code class="language-plaintext highlighter-rouge">/scrum</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="-변환-체크리스트">🎯 변환 체크리스트</h2>
+
+<h3 id="-파일-구조">✅ 파일 구조</h3>
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code class="language-plaintext highlighter-rouge">_config.yml</code> 생성됨</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code class="language-plaintext highlighter-rouge">Gemfile</code> 생성됨</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code class="language-plaintext highlighter-rouge">_layouts/</code> 폴더와 레이아웃 파일들 생성됨</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code class="language-plaintext highlighter-rouge">_posts/</code> 폴더 생성됨</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code class="language-plaintext highlighter-rouge">template.md</code> 생성됨</li>
+</ul>
+
+<h3 id="-콘텐츠-마이그레이션">✅ 콘텐츠 마이그레이션</h3>
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />기존 HTML 파일들을 마크다운으로 변환</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Front Matter 메타데이터 추가</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />파일명을 Jekyll 규칙에 맞게 변경</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code class="language-plaintext highlighter-rouge">_posts/</code> 폴더로 이동</li>
+</ul>
+
+<h3 id="-설정-확인">✅ 설정 확인</h3>
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><code class="language-plaintext highlighter-rouge">_config.yml</code>에서 팀원 목록 업데이트</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />GitHub Pages 빌드 성공 확인</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />웹사이트에서 스크럼 목록 정상 표시 확인</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />필터링 기능 동작 확인</li>
+</ul>
+
+<h2 id="-주의사항">🔧 주의사항</h2>
+
+<h3 id="날짜-형식">날짜 형식</h3>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 올바른 형식</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s">2024-01-15</span>
+
+<span class="c1"># 잘못된 형식</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2024년</span><span class="nv"> </span><span class="s">1월</span><span class="nv"> </span><span class="s">15일"</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s">2024-1-15</span>
+</code></pre></div></div>
+
+<h3 id="카테고리-설정">카테고리 설정</h3>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 반드시 포함해야 함</span>
+<span class="na">categories</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">scrum</span><span class="pi">]</span>
+
+<span class="c1"># 선택적</span>
+<span class="na">project</span><span class="pi">:</span> <span class="s2">"</span><span class="s">프로젝트명"</span>
+<span class="na">category</span><span class="pi">:</span> <span class="s2">"</span><span class="s">백엔드"</span>
+</code></pre></div></div>
+
+<h3 id="파일명-규칙">파일명 규칙</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✅ 올바른 예시:
+_posts/2024-01-15-백엔드개발.md
+_posts/2024-12-31-연말정리.md
+
+❌ 잘못된 예시:
+_posts/백엔드개발.md
+_posts/2024-1-15-개발.md
+2024-01-15-개발.md (폴더 위치 틀림)
+</code></pre></div></div>
+
+<h2 id="-자주-발생하는-문제">🐛 자주 발생하는 문제</h2>
+
+<h3 id="1-jekyll-빌드-실패">1. Jekyll 빌드 실패</h3>
+<p><strong>증상</strong>: GitHub Pages에서 빌드 실패 메일 수신</p>
+
+<p><strong>해결책</strong>:</p>
+<ul>
+  <li>Front Matter 문법 확인</li>
+  <li>날짜 형식 확인</li>
+  <li>파일명 규칙 확인</li>
+  <li><code class="language-plaintext highlighter-rouge">_config.yml</code> 문법 확인</li>
+</ul>
+
+<h3 id="2-스크럼이-목록에-안-나타남">2. 스크럼이 목록에 안 나타남</h3>
+<p><strong>증상</strong>: 파일은 있는데 게시판에 안 보임</p>
+
+<p><strong>해결책</strong>:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">categories: [scrum]</code> 포함 확인</li>
+  <li><code class="language-plaintext highlighter-rouge">_posts/</code> 폴더 위치 확인</li>
+  <li>파일명 날짜 형식 확인</li>
+</ul>
+
+<h3 id="3-한글-깨짐">3. 한글 깨짐</h3>
+<p><strong>증상</strong>: 한글이 제대로 표시되지 않음</p>
+
+<p><strong>해결책</strong>:</p>
+<ul>
+  <li>파일을 UTF-8 인코딩으로 저장</li>
+  <li><code class="language-plaintext highlighter-rouge">_config.yml</code>에 <code class="language-plaintext highlighter-rouge">encoding: utf-8</code> 추가</li>
+</ul>
+
+<h2 id="-팁과-권장사항">💡 팁과 권장사항</h2>
+
+<h3 id="점진적-마이그레이션">점진적 마이그레이션</h3>
+<p>모든 파일을 한번에 변환하지 말고, 새로운 스크럼부터 마크다운으로 작성하는 것을 권장합니다.</p>
+
+<h3 id="마크다운-에디터-활용">마크다운 에디터 활용</h3>
+<ul>
+  <li><strong>VS Code</strong>: Jekyll 플러그인 설치</li>
+  <li><strong>Typora</strong>: WYSIWYG 마크다운 에디터</li>
+  <li><strong>Mark Text</strong>: 무료 마크다운 에디터</li>
+</ul>
+
+<h3 id="로컬-개발-환경">로컬 개발 환경</h3>
+<p>Jekyll을 로컬에 설치해서 변경사항을 미리 확인하는 것을 권장합니다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Jekyll 로컬 설치 및 실행</span>
+gem <span class="nb">install </span>jekyll bundler
+<span class="nb">cd </span>scrum/
+bundle <span class="nb">install
+</span>bundle <span class="nb">exec </span>jekyll serve
+</code></pre></div></div>
+
+<h2 id="-마이그레이션-지원">📞 마이그레이션 지원</h2>
+
+<p>마이그레이션 과정에서 문제가 생기면:</p>
+<ol>
+  <li>이 가이드를 다시 확인</li>
+  <li>Jekyll 공식 문서 참조</li>
+  <li>GitHub Pages 빌드 로그 확인</li>
+  <li>이슈 생성해서 도움 요청</li>
+</ol>
+
+<hr />
+
+<p>🎉 <strong>성공적인 마이그레이션을 응원합니다!</strong> 🚀</p>
+
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,144 @@
+---
+layout: default
+---
+
+<style>
+    .scrum-meta {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        border-left: 4px solid #007bff;
+    }
+
+    .scrum-meta h2 {
+        color: #007bff;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+    }
+
+    .meta-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .meta-item {
+        background: white;
+        padding: 12px;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .meta-label {
+        font-weight: bold;
+        color: #495057;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .meta-value {
+        color: #6c757d;
+    }
+
+    .scrum-content {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        line-height: 1.8;
+    }
+
+    .scrum-content h1,
+    .scrum-content h2,
+    .scrum-content h3 {
+        color: #212529;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    .scrum-content h1 {
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    .scrum-content ul,
+    .scrum-content ol {
+        margin-left: 20px;
+        margin-bottom: 15px;
+    }
+
+    .scrum-content li {
+        margin-bottom: 8px;
+    }
+
+    .scrum-content code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+    }
+
+    .scrum-content pre {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin: 15px 0;
+    }
+
+    .scrum-content blockquote {
+        border-left: 4px solid #007bff;
+        padding-left: 20px;
+        margin: 20px 0;
+        font-style: italic;
+        color: #6c757d;
+    }
+
+    @media (max-width: 768px) {
+        .meta-info {
+            grid-template-columns: 1fr;
+        }
+        
+        .scrum-content {
+            padding: 20px;
+        }
+    }
+</style>
+
+<a href="../" class="back-link">← 스크럼 게시판으로 돌아가기</a>
+
+<div class="scrum-meta">
+    <h2>📋 {{ page.title }}</h2>
+    
+    <div class="meta-info">
+        <div class="meta-item">
+            <span class="meta-label">👤 작성자</span>
+            <span class="meta-value">{{ page.author }}</span>
+        </div>
+        
+        <div class="meta-item">
+            <span class="meta-label">📅 날짜</span>
+            <span class="meta-value">{{ page.date | date: "%Y년 %m월 %d일 (%a)" }}</span>
+        </div>
+        
+        {% if page.project %}
+        <div class="meta-item">
+            <span class="meta-label">🚀 프로젝트</span>
+            <span class="meta-value">{{ page.project }}</span>
+        </div>
+        {% endif %}
+        
+        {% if page.category %}
+        <div class="meta-item">
+            <span class="meta-label">📁 카테고리</span>
+            <span class="meta-value">{{ page.category }}</span>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="scrum-content">
+    {{ content }}
+</div> 

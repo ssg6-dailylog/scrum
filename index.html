@@ -1,0 +1,735 @@
+---
+layout: default
+title: 메인
+---
+
+<style>
+    body {
+        background: linear-gradient(135deg, #fff5f5 0%, #f0fff4 50%, #f0f8ff 100%);
+        font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+        margin: 0;
+        color: #333;
+        min-height: 100vh;
+    }
+
+    .controls {
+        padding: 24px;
+        background: linear-gradient(135deg, #ff7b54 0%, #ff9478 100%);
+        border-bottom: 3px solid #ff6b4a;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(255, 107, 74, 0.2);
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter-btn {
+        padding: 10px 20px;
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.9);
+        color: #ff6b4a;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+        background: white;
+        color: #ff6b4a;
+        border-color: #ff6b4a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 74, 0.3);
+    }
+
+    .content {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 0 30px;
+    }
+
+    .no-posts {
+        text-align: center;
+        padding: 80px 40px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+        border: 2px dashed rgba(255, 182, 193, 0.4);
+        border-radius: 25px;
+        box-shadow: 0 8px 30px rgba(255, 107, 74, 0.1);
+        backdrop-filter: blur(15px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .no-posts::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 2s ease;
+        animation: shimmer 3s ease infinite;
+    }
+
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    .empty-icon {
+        font-size: 80px;
+        margin-bottom: 24px;
+        filter: drop-shadow(0 4px 12px rgba(255, 107, 74, 0.3));
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .empty-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #ff6b4a;
+        margin: 0 0 12px 0;
+        text-shadow: 0 2px 4px rgba(255, 107, 74, 0.1);
+    }
+
+    .empty-message {
+        font-size: 16px;
+        color: #666;
+        margin: 0 0 32px 0;
+        line-height: 1.5;
+    }
+
+    .empty-suggestion {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .suggestion-item {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+        color: #555;
+        padding: 12px 24px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid rgba(255, 182, 193, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .suggestion-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 74, 0.2);
+        border-color: rgba(255, 107, 74, 0.4);
+    }
+
+    .post-list {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(255, 107, 74, 0.1);
+        border: 1px solid rgba(255, 182, 193, 0.2);
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .board-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .board-header {
+        background: linear-gradient(135deg, #ff7b54, #ff9478);
+        color: white;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .board-header th {
+        padding: 24px 20px;
+        font-size: 16px;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        font-weight: 700;
+    }
+
+    .board-header th:last-child {
+        border-right: none;
+    }
+
+    .col-category {
+        width: 120px;
+    }
+
+    .col-title {
+        width: auto;
+        text-align: left !important;
+    }
+
+    .col-author {
+        width: 180px;
+    }
+
+    .col-date {
+        width: 150px;
+    }
+
+    .post-item {
+        border-bottom: 2px solid rgba(255, 182, 193, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .post-item:last-child {
+        border-bottom: 2px solid rgba(255, 182, 193, 0.2);
+    }
+
+    .post-item::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #ff7b54, #4ecdc4, #45b7d1, #96ceb4);
+        background-size: 400% 100%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .post-item:hover::after {
+        opacity: 0.6;
+        animation: gradientFlow 2s ease infinite;
+    }
+
+    @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .post-item:hover {
+        background: linear-gradient(135deg, rgba(255, 123, 84, 0.06), rgba(255, 182, 193, 0.03));
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(255, 107, 74, 0.1);
+    }
+
+    .post-item td {
+        padding: 22px 20px;
+        vertical-align: middle;
+        border-right: 1px solid rgba(255, 182, 193, 0.05);
+        color: #333;
+    }
+
+    .post-item td:last-child {
+        border-right: none;
+    }
+
+    .category-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-align: center;
+        min-width: 50px;
+        background: linear-gradient(135deg, #ff7b54, #ff9478);
+        color: white;
+        box-shadow: 0 2px 4px rgba(255, 107, 74, 0.2);
+    }
+
+    .title-cell {
+        text-align: left !important;
+        max-width: 0;
+        overflow: hidden;
+    }
+
+    .title-text {
+        font-size: 15px;
+        color: #333;
+        font-weight: 600;
+        text-decoration: none;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 1.4;
+    }
+
+    .title-preview {
+        font-size: 12px;
+        color: #888;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .author-cell {
+        text-align: center;
+    }
+
+    .author-name {
+        font-weight: 700;
+        color: #ff6b4a;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .author-badge {
+        font-size: 11px;
+        color: #4ecdc4;
+        background: rgba(78, 205, 196, 0.1);
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    .date-cell {
+        text-align: center;
+        font-size: 13px;
+        color: #666;
+        font-weight: 500;
+    }
+
+
+
+    /* 테이블용 아이콘 */
+    .scrum-icon {
+        display: inline-block;
+        margin-right: 6px;
+        font-size: 13px;
+    }
+
+    .add-post {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff7b54, #ff9478);
+        color: white;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(255, 107, 74, 0.4);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-5px);
+        }
+        60% {
+            transform: translateY(-3px);
+        }
+    }
+
+    .add-post:hover {
+        background: linear-gradient(135deg, #ff6b4a, #ff7b54);
+        transform: scale(1.1);
+        box-shadow: 0 8px 25px rgba(255, 107, 74, 0.6);
+        color: white;
+        text-decoration: none;
+        animation: none;
+    }
+
+    @media (max-width: 768px) {
+        .controls {
+            padding: 20px 16px;
+        }
+        
+        .content {
+            padding: 0 16px;
+            max-width: 100%;
+        }
+        
+        .board-table {
+            font-size: 12px;
+        }
+        
+        .board-header th {
+            padding: 16px 12px;
+            font-size: 13px;
+        }
+        
+        .post-item td {
+            padding: 14px 12px;
+        }
+        
+        .col-category {
+            width: 70px;
+        }
+        
+        .col-author {
+            width: 90px;
+        }
+        
+        .col-date {
+            width: 90px;
+        }
+        
+        .category-badge {
+            font-size: 9px;
+            padding: 3px 6px;
+            min-width: 40px;
+        }
+        
+        .title-text {
+            font-size: 13px;
+        }
+        
+        .title-preview {
+            font-size: 11px;
+        }
+        
+        .author-name {
+            font-size: 12px;
+        }
+        
+        .author-badge {
+            font-size: 9px;
+            padding: 1px 4px;
+        }
+        
+        .date-cell {
+            font-size: 11px;
+        }
+        
+        .add-post {
+            width: 56px;
+            height: 56px;
+            font-size: 24px;
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        .modal-content {
+            width: 95%;
+            padding: 24px;
+            margin: 20px auto;
+        }
+        
+        .filter-buttons {
+            gap: 8px;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 182, 193, 0.3);
+        backdrop-filter: blur(8px);
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-content {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+        margin: 50px auto;
+        padding: 32px;
+        border-radius: 25px;
+        width: 90%;
+        max-width: 650px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(255, 107, 74, 0.2);
+        border: 2px solid rgba(255, 182, 193, 0.3);
+        backdrop-filter: blur(15px);
+        animation: slideUp 0.4s ease;
+        position: relative;
+    }
+
+    .close {
+        color: #ff6b4a;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: absolute;
+        top: 20px;
+        right: 24px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255, 107, 74, 0.1);
+    }
+
+    .close:hover {
+        color: white;
+        background: linear-gradient(135deg, #ff7b54, #ff9478);
+        transform: rotate(90deg) scale(1.1);
+    }
+</style>
+
+<div class="controls">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div class="filter-buttons">
+            <a href="#" class="filter-btn active" onclick="filterPosts('all'); return false;">전체</a>
+            {% for member in site.team_members %}
+            <a href="#" class="filter-btn" onclick="filterPosts('{{ member.name }}'); return false;">{{ member.name }}</a>
+            {% endfor %}
+            <a href="#" class="filter-btn" onclick="filterPosts('예시'); return false;">예시</a>
+        </div>
+        <button onclick="location.reload()" style="padding: 10px 20px; background: linear-gradient(135deg, #4ecdc4, #45b7d1); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3); backdrop-filter: blur(10px);" onmouseover="this.style.transform='translateY(-2px) scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(78, 205, 196, 0.5)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(78, 205, 196, 0.3)'">
+            🔄 새로고침
+        </button>
+    </div>
+</div>
+
+<div class="content">
+    <div id="post-list" class="post-list">
+        {% assign scrums = site.posts | where_exp: "post", "post.categories contains 'scrum'" %}
+        {% if scrums.size == 0 %}
+            <div class="no-posts">
+                <div class="empty-icon">📝</div>
+                <h3 class="empty-title">아직 작성된 스크럼이 없어요</h3>
+                <p class="empty-message">팀원들과 함께 첫 번째 스크럼을 작성해보세요!</p>
+                <div class="empty-suggestion">
+                    <span class="suggestion-item">💡 오늘 한 일을 공유해보세요</span>
+                    <span class="suggestion-item">🎯 내일 할 일을 계획해보세요</span>
+                    <span class="suggestion-item">💭 간단한 한줄평도 좋아요</span>
+                </div>
+            </div>
+        {% else %}
+            <table class="board-table">
+                <thead class="board-header">
+                    <tr>
+                        <th class="col-category">말머리</th>
+                        <th class="col-title">제목</th>
+                        <th class="col-author">작성자</th>
+                        <th class="col-date">작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in scrums %}
+                    <tr class="post-item" data-author="{{ post.author }}" onclick="openPostModal(this)" 
+                         data-title="{{ post.title }}" 
+                         data-author="{{ post.author }}" 
+                         data-date="{{ post.date | date: '%Y년 %m월 %d일 (%a)' }}"
+                         data-content="{{ post.content | markdownify | strip_html | escape }}">
+                        
+                        <!-- 말머리 -->
+                        <td style="text-align: center;">
+                            <span class="category-badge">스크럼</span>
+                        </td>
+                        
+                        <!-- 제목 -->
+                        <td class="title-cell">
+                            <div class="title-text">
+                                <span class="scrum-icon">📝</span>{{ post.title }}
+                            </div>
+                        </td>
+                        
+                        <!-- 작성자 -->
+                        <td class="author-cell">
+                            <div class="author-name">{{ post.author }}</div>
+                            <div class="author-badge">팀원</div>
+                        </td>
+                        
+                        <!-- 작성일 -->
+                        <td class="date-cell">
+                            {{ post.date | date: "%y.%m.%d" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div>
+
+<a href="#" class="add-post" onclick="showAddModal(); return false;" title="새 스크럼 추가">+</a>
+
+<!-- 스크럼 내용 보기 모달 -->
+<div id="viewModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('viewModal')">&times;</span>
+        <div id="modal-content"></div>
+    </div>
+</div>
+
+<!-- 새 스크럼 추가 안내 모달 -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addModal')">&times;</span>
+        <h2>🤖 Jekyll 방식으로 스크럼 작성하기</h2>
+        <p><strong>마크다운 파일로 쉽게 작성하세요!</strong></p>
+        
+        <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #28a745;">
+            <h3>✨ Jekyll 자동화!</h3>
+            <ol>
+                <li>📄 <code>template.md</code> 복사해서 스크럼 작성</li>
+                <li>📁 <code>_posts</code> 폴더에 저장: <code>YYYY-MM-DD-이름-제목.md</code></li>
+                <li>📝 Front Matter에 작성자, 날짜 등 설정</li>
+                <li>💾 GitHub에 커밋 & 푸시</li>
+                <li>🚀 <strong>GitHub Pages가 자동으로 빌드!</strong></li>
+            </ol>
+        </div>
+        
+        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ffc107;">
+            <h3>📋 파일명 규칙</h3>
+            <p><strong>형식:</strong> <code>YYYY-MM-DD-이름-제목.md</code></p>
+            <ul>
+                <li><code>2024-01-15-신민혁-백엔드개발.md</code></li>
+                <li><code>2024-01-16-고윤아-UI구현.md</code></li>
+                <li><code>2024-01-17-김병곤-취준활동.md</code></li>
+            </ul>
+        </div>
+        
+        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #2196f3;">
+            <h3>⚡ Front Matter 예시</h3>
+            <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 0.9em;">---
+layout: scrum
+title: "오늘 하루"
+date: 2024-01-15
+author: "신민혁"
+categories: [scrum]
+---</pre>
+        </div>
+        
+        <p style="color: #28a745; font-weight: bold; text-align: center; margin-top: 20px;">
+            🎉 마크다운으로 더욱 편리하게 작성하세요!
+        </p>
+    </div>
+</div>
+
+<script>
+    function filterPosts(author) {
+        const posts = document.querySelectorAll('.post-item');
+        const buttons = document.querySelectorAll('.filter-btn');
+        const table = document.querySelector('.board-table');
+        
+        // 모든 버튼에서 active 클래스 제거
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        // 클릭된 버튼에 active 클래스 추가
+        event.target.classList.add('active');
+        
+        // 포스트 필터링
+        posts.forEach(post => {
+            if (author === 'all' || post.dataset.author === author) {
+                post.style.display = 'table-row';
+            } else {
+                post.style.display = 'none';
+            }
+        });
+        
+        // 필터링 결과가 없으면 메시지 표시
+        const visiblePosts = document.querySelectorAll('.post-item[style="display: table-row"], .post-item:not([style*="display: none"])');
+        const postList = document.getElementById('post-list');
+        
+        if (visiblePosts.length === 0 && author !== 'all') {
+            if (table) table.style.display = 'none';
+            if (!document.querySelector('.no-posts-filtered')) {
+                const noPostsDiv = document.createElement('div');
+                noPostsDiv.className = 'no-posts no-posts-filtered';
+                noPostsDiv.innerHTML = `
+                    <div class="empty-icon">🔍</div>
+                    <h3 class="empty-title">${author}의 스크럼이 없습니다</h3>
+                    <p class="empty-message">다른 팀원을 선택하거나 전체를 확인해보세요!</p>
+                `;
+                postList.appendChild(noPostsDiv);
+            }
+        } else {
+            if (table) table.style.display = 'table';
+            const noPostsFiltered = document.querySelector('.no-posts-filtered');
+            if (noPostsFiltered) {
+                noPostsFiltered.remove();
+            }
+        }
+    }
+
+    function openPostModal(element) {
+        const title = element.dataset.title;
+        const author = element.dataset.author;
+        const date = element.dataset.date;
+        const content = element.dataset.content;
+        
+        const modalContent = document.getElementById('modal-content');
+        modalContent.innerHTML = `
+            <div style="padding-bottom: 20px; border-bottom: 3px solid rgba(255, 182, 193, 0.3); margin-bottom: 24px;">
+                <h2 style="color: #ff6b4a; margin: 0 0 16px 0; font-size: 24px; font-weight: 700;">${title}</h2>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; font-size: 15px;">
+                    <div style="background: linear-gradient(135deg, #ff7b54, #ff9478); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 2px 8px rgba(255, 107, 74, 0.3);">👤 ${author}</div>
+                    <div style="background: linear-gradient(135deg, #4ecdc4, #45b7d1); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);">📅 ${date}</div>
+                </div>
+            </div>
+            <div style="line-height: 1.7; font-size: 16px; color: #333; white-space: pre-line; background: rgba(255, 255, 255, 0.7); padding: 24px; border-radius: 20px; border: 1px solid rgba(255, 182, 193, 0.2);">
+                ${content}
+            </div>
+        `;
+        
+        document.getElementById('viewModal').style.display = 'block';
+    }
+
+    function showAddModal() {
+        document.getElementById('addModal').style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+</script>
