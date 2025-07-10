@@ -25,3 +25,5 @@ test-output/
 
 # XML 파일 무시 (형이 이미 추가한 거)
 *.xml
+/vendor
+/_site
