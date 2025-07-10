@@ -1,7 +1,5 @@
 source "https://rubygems.org"
 
-# GitHub Pages 호환 gem
-gem "github-pages", group: :jekyll_plugins
 
 # Windows 호환성
 gem "wdm", "~> 0.1.0" if Gem.win_platform?
@@ -10,4 +8,4 @@ gem "wdm", "~> 0.1.0" if Gem.win_platform?
 group :jekyll_plugins do
   gem "jekyll-feed"
   gem "jekyll-sitemap"
-end 
+end
