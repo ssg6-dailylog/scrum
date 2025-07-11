@@ -512,6 +512,38 @@ title: 메인
         background: linear-gradient(135deg, #ff7b54, #ff9478);
         transform: rotate(90deg) scale(1.1);
     }
+
+    .modal-markdown-content h1,
+    .modal-markdown-content h2,
+    .modal-markdown-content h3,
+    .modal-markdown-content h4,
+    .modal-markdown-content h5,
+    .modal-markdown-content h6 {
+        margin-top: 24px;
+        margin-bottom: 12px;
+        font-weight: bold;
+    }
+    .modal-markdown-content ul,
+    .modal-markdown-content ol {
+        margin-left: 24px;
+        margin-bottom: 16px;
+    }
+    .modal-markdown-content li {
+        margin-bottom: 6px;
+    }
+    .modal-markdown-content a {
+        color: #007bff;
+        text-decoration: underline;
+        word-break: break-all;
+    }
+    .modal-markdown-content blockquote {
+        border-left: 4px solid #ff7b54;
+        padding-left: 16px;
+        color: #888;
+        margin: 16px 0;
+        font-style: italic;
+        background: #fff5f0;
+    }
 </style>
 
 <div class="controls">
@@ -555,11 +587,11 @@ title: 메인
                 </thead>
                 <tbody>
                     {% for post in scrums %}
-                    <tr class="post-item" data-author="{{ post.author }}" onclick="openPostModal(this)" 
-                         data-title="{{ post.title }}" 
-                         data-author="{{ post.author }}" 
-                         data-date="{{ post.date | date: '%Y년 %m월 %d일 (%a)' }}"
-                         data-content="{{ post.content | markdownify | strip_html | escape }}">
+                    <tr class="post-item"
+                        data-title="{{ post.title }}"
+                        data-author="{{ post.author }}"
+                        data-date="{{ post.date | date: '%Y년 %m월 %d일 (%a)' }}"
+                        data-content="{{ post.content | markdownify | strip_newlines | escape }}">
                         
                         <!-- 말머리 -->
                         <td style="text-align: center;">
@@ -595,10 +627,10 @@ title: 메인
 
 <!-- 스크럼 내용 보기 모달 -->
 <div id="viewModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('viewModal')">&times;</span>
-        <div id="modal-content"></div>
-    </div>
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('viewModal')">&times;</span>
+    <div id="modal-content"></div>
+  </div>
 </div>
 
 <!-- 새 스크럼 추가 안내 모달 -->
@@ -647,6 +679,7 @@ categories: [scrum]
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     function filterPosts(author) {
         const posts = document.querySelectorAll('.post-item');
         const buttons = document.querySelectorAll('.filter-btn');
@@ -692,36 +725,43 @@ categories: [scrum]
         }
     }
 
+    window.filterPosts = filterPosts;
+
     function openPostModal(element) {
         const title = element.dataset.title;
         const author = element.dataset.author;
         const date = element.dataset.date;
         const content = element.dataset.content;
-        
+
         const modalContent = document.getElementById('modal-content');
         modalContent.innerHTML = `
             <div style="padding-bottom: 20px; border-bottom: 3px solid rgba(255, 182, 193, 0.3); margin-bottom: 24px;">
                 <h2 style="color: #ff6b4a; margin: 0 0 16px 0; font-size: 24px; font-weight: 700;">${title}</h2>
                 <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; font-size: 15px;">
-                    <div style="background: linear-gradient(135deg, #ff7b54, #ff9478); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 2px 8px rgba(255, 107, 74, 0.3);">👤 ${author}</div>
-                    <div style="background: linear-gradient(135deg, #4ecdc4, #45b7d1); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);">📅 ${date}</div>
+                    <div style="background: linear-gradient(135deg, #ff7b54, #ff9478); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600;">👤 ${author}</div>
+                    <div style="background: linear-gradient(135deg, #4ecdc4, #45b7d1); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600;">📅 ${date}</div>
                 </div>
             </div>
-            <div style="line-height: 1.7; font-size: 16px; color: #333; white-space: pre-line; background: rgba(255, 255, 255, 0.7); padding: 24px; border-radius: 20px; border: 1px solid rgba(255, 182, 193, 0.2);">
+            <div class="modal-markdown-content">
                 ${content}
             </div>
         `;
-        
         document.getElementById('viewModal').style.display = 'block';
     }
+
+    window.openPostModal = openPostModal;
 
     function showAddModal() {
         document.getElementById('addModal').style.display = 'block';
     }
 
+    window.showAddModal = showAddModal;
+
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = 'none';
     }
+
+    window.closeModal = closeModal;
 
     // 모달 외부 클릭 시 닫기
     window.onclick = function(event) {
@@ -732,4 +772,13 @@ categories: [scrum]
             }
         });
     }
+    // marked.js 추가 필요
+    document.querySelectorAll('.post-item').forEach(row => {
+        row.addEventListener('click', function () {
+            openPostModal(this);
+        });
+    });
+});
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
