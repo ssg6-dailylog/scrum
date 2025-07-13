@@ -1,6 +1,6 @@
 ---
 layout: scrum
-title: "Daily Scrum"
+title: "DailyScrum"
 date: 2024-07-11
 author: "김병곤"
 categories: [scrum]
