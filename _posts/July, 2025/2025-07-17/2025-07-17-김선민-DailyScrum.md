@@ -1,8 +1,8 @@
 ---
 layout: scrum
 title: "DailyScrum"
-date: 2025-07-16
-author: "김선민"k
+date: 2025-07-17
+author: "김선민"
 categories: [scrum]
 ---
 
