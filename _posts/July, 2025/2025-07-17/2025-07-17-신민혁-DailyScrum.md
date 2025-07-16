@@ -13,6 +13,7 @@ categories: [scrum]
 - postgreSQL 공부
 - 개인프로젝트 기능명세서 작성하기
 - 개인프로젝트 ERD 작성하기
+- [사이드 프로젝트 플랫폼에서 사이드 프로젝트 참가 지원](https://holaworld.io/)
 
 ### 상세 내용
 
