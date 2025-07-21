@@ -39,7 +39,7 @@ categories: [scrum]
 - 혼공 네트워크 5~8강 
 - 1개 지원해보기 
 - springdoc-open api reference 자료 읽어보기 
-- npr news 짧은거 1개 듣고 정리 & 작문 
+- 도로주행 2시간 교육 
 - 하체 40분 + 코어 5분 + 천계 or 러닝 20분 
 
 
@@ -58,7 +58,7 @@ categories: [scrum]
 더 실전 같이 준비하실 수 있을거 같아여  
 프롬포팅 예시 공유합니다요 쓰실 분들 쓰십쇼    
 [프롬포팅 예시](https://melodious-tailor-2a7.notion.site/Opic-GPT-2379a96c76ba80bfa195e2a33f4c6b2c?source=copy_link)  
-  
+
 
 
 
