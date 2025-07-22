@@ -38,9 +38,8 @@ PM이랑 프론트가 사람이 적어서 열심히 어필 좀 했다
 - 아빠랑 저녁 러닝 5km  
 - 혼공 네트워크 7강~11강 
 - 정처기 필기 1과목 마저 정리 
-- npr news article 1개 summary & short essay 쓰기
-- springdoc-openAPI reference 읽어보기 
-- 시간되면 final 때 구현한 security 좀 보기 
+- npr news article 1개 summary & short essay 쓰기 
+- 도로주행 2시간 교육 & 시험 
 
 
 
