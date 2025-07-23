@@ -12,8 +12,8 @@ categories: [scrum]
 - 도로주행 두시간 교육 & 합격 
 - 사이드 프로젝트 팀빌딩 
 - 너무 매일 운동하는거 같아 산책 1시간으로 대체
-- [정처기 개념 1과목 정리 아주 조금](https://melodious-tailor-2a7.notion.site/1-2379a96c76ba80889f8fcb75983a7dc4?source=copy_link) 
--[npr news 듣고 스크립트 단어 정리, 내생각 정리](https://melodious-tailor-2a7.notion.site/250723-Why-more-residents-are-saying-No-to-AI-data-centers-in-their-backyard-2389a96c76ba808ea9f3d2a60cefbcd3?source=copy_link)
+- [정처기 개념 1과목 정리 아주 조금](https://melodious-tailor-2a7.notion.site/1-2379a96c76ba80889f8fcb75983a7dc4?source=copy_link)   
+- [npr news 듣고 스크립트 단어 정리, 내생각 정리](https://melodious-tailor-2a7.notion.site/250723-Why-more-residents-are-saying-No-to-AI-data-centers-in-their-backyard-2389a96c76ba808ea9f3d2a60cefbcd3?source=copy_link)
 
 
 
@@ -51,7 +51,8 @@ categories: [scrum]
  나름 테크 기반 기사 보려고 하는 편인데        
  오늘 본 기사는 나름 제 전공이랑 어울리는 기사였어요    
  AI 수요가 증가하면서 그만큼 그걸 운영하는 Datacenter도 늘고 있는데  
- 그게 아무래도 소음도 그렇고 자원도 많이 써서 님비 현상이 돌고 지역 갈등이 있다네요 미국에서  
+ 그게 아무래도 소음도 그렇고 자원도 많이 써서   
+ 님비 현상이 돌고 지역 갈등이 있다네요 미국에서    
  북부 버지니아에만 전 세계의 13% 수요를 감당하는 Datacenter가 있대요  
  그동안 AI 신나게 쓰기만 했지 이런 문제는 생각해보지 못해서 흥미로워서 가져와봤습니다  
 
