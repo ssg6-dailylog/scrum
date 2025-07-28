@@ -9,11 +9,12 @@ categories: [scrum]
 ## 📝 어제 한 일
 
 - 도넛 회의(금 2pm / 일 9am) 
-  - 화면정의서
+  - 화면정의서(https://small-ragdoll-a57.notion.site/23b3a719d35080d98667c9f71f1ed06f?source=copy_link)
   - 프론트 개발
   - 쿼리/더미 작성
 - 온여팀 : 27일(일) 오후 3시반 회의
-  - 기획서 작성
+  - 팀 노션 (https://small-ragdoll-a57.notion.site/23a3a719d35080719078f87a3c77e854?source=copy_link)
+  - 기획서 작성(https://small-ragdoll-a57.notion.site/23d3a719d350801f81e8c4dc43c625e9?source=copy_link)
 
 
 ### 상세 내용
