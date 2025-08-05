@@ -1,7 +1,7 @@
 ---
 layout: scrum
 title: "DailyScrum"
-date: 2025-08-05
+date: 2025-08-06
 author: "신민혁"
 categories: [scrum]
 ---
