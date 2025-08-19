@@ -63,6 +63,8 @@ team_members:
     folder: "김선민"
   - name: "최문규"
     folder: "최문규"
+  - name: "박건희"
+    folder: "박건희"
 
 # 시간대 설정
 timezone: Asia/Seoul
