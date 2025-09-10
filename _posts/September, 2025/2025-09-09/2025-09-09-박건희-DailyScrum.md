@@ -1,6 +1,6 @@
 ---
 layout: scrum
-title: "DailyScrum"
+title: "백엔드 - 로그인/회원가입"
 date: 2025-09-09
 author: "박건희"
 categories: [scrum]
@@ -45,50 +45,50 @@ categories: [scrum]
 - 인증번호를 Redis를 통해 보관 (세션을 사용하지 않는 이유 : 로드밸런서로 다서버 환경 구축을 염두에 두기 위해 - Redis는 별도의 중앙 저장소 역할을 하므로, 서버 A/B 어디서 요청이 들어와도 동일한 키(auth:code:email)를 조회할 수 있음)
 - 윈도우에서는 레디스 사용이 어려운 문제점 발생 -> 윈도우에도 우분투 깔아서 개발진행
 ```
-# 1. WSL 설치 및 설정
+- 1. WSL 설치 및 설정
 wsl --install                            # WSL 설치 (Ubuntu 기본 설치)
 wsl --update                             # WSL 업데이트 (필요한 경우)
 wsl --set-default-version 2              # WSL 2로 기본 설정
 
-# 1-1. 설치가 이미 되어있는 경우
+- 1-1. 설치가 이미 되어있는 경우
 wsl --list --verbose
 wsl -d Ubuntu
 
-# 2. Ubuntu 실행 및 업데이트
+- 2. Ubuntu 실행 및 업데이트
 sudo apt update && sudo apt upgrade -y   # 패키지 업데이트 및 업그레이드
 
-# 3. Redis 설치
+- 3. Redis 설치
 sudo apt install redis -y                # Redis 설치
 
-# 4. Redis 실행
+- 4. Redis 실행
 sudo service redis-server start          # Redis 서버 시작
 
-# 5. Redis 동작 확인
+- 5. Redis 동작 확인
 redis-cli ping                           # 결과: PONG
 ```
 ```
-# 배포시 application.properties 설정
+- 배포시 application.properties 설정
 spring.data.redis.host=내부 IP나 호스트네임 (혹은 AWS ElastiCache라면 엔드포인트 주소 사용)
 spring.data.redis.port=6379
 spring.data.redis.timeout=6000
 
-# 배포시 AWS ElastiCache 사용하지 않을 경우 우분투 설정
-# 1. 패키지 업데이트
+- 배포시 AWS ElastiCache 사용하지 않을 경우 우분투 설정
+- 1. 패키지 업데이트
 sudo apt update && sudo apt upgrade -y
 
-# 2. Redis 설치
+- 2. Redis 설치
 sudo apt install redis -y
 
-# 3. Redis 실행
+- 3. Redis 실행
 sudo systemctl enable redis-server
 sudo systemctl start redis-server
 
-# 4. 보안 설정 (bind 0.0.0.0 허용 + 비밀번호 설정)
+- 4. 보안 설정 (bind 0.0.0.0 허용 + 비밀번호 설정)
 sudo nano /etc/redis/redis.conf
-# -> bind 0.0.0.0
-# -> requirepass yourStrongPassword
+-> bind 0.0.0.0
+-> requirepass yourStrongPassword
 
-# 5. 방화벽/보안그룹에서 포트 6379 열기 (내부망만 허용 권장)
+- 5. 방화벽/보안그룹에서 포트 6379 열기 (내부망만 허용 권장)
 ```
 
 4. 인증코드 관련 처리

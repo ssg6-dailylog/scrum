@@ -1,6 +1,6 @@
 ---
 layout: scrum
-title: "DailyScrum"
+title: "전체 프로젝트 기획"
 date: 2025-09-07
 author: "박건희"
 categories: [scrum]
