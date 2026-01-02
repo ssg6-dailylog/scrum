@@ -16,12 +16,12 @@ categories: [scrum]
 
 1. 서버 경로 : [블루CRM](http://psns0122.com/login)
 2. 테스트 아이디
-> TEST ID / PASSWORD
-> 
-> 본사 관리자: wm5256@naver.com / test1234
-> 센터장: centerhead1@naver.com / test1234
-> 전문가: expert1@naver.com / test1234
-> 팀장: manager1@naver.com / test1234
+> TEST ID / PASSWORD<br>
+> <br>
+> 본사 관리자: wm5256@naver.com / test1234<br>
+> 센터장: centerhead1@naver.com / test1234<br>
+> 전문가: expert1@naver.com / test1234<br>
+> 팀장: manager1@naver.com / test1234<br>
 > 프로(일반직원): staff1@naver.com / test1234
 
 ## 🎯 오늘 할 일
